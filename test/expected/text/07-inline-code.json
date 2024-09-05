@@ -1,0 +1,11 @@
+[
+  {
+    "attributes": {
+      "code": true
+    },
+    "insert": "super code"
+  },
+  {
+    "insert": "\n"
+  }
+]

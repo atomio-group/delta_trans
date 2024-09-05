@@ -1,0 +1,29 @@
+[
+  {
+    "insert": "line 1 **bold**"
+  },
+  {
+    "attributes": {
+      "code-block": true
+    },
+    "insert": "\n"
+  },
+  {
+    "insert": ">quote"
+  },
+  {
+    "attributes": {
+      "code-block": true
+    },
+    "insert": "\n"
+  },
+  {
+    "insert": "line 3"
+  },
+  {
+    "attributes": {
+      "code-block": true
+    },
+    "insert": "\n"
+  }
+]

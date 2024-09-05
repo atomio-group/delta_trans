@@ -1,0 +1,38 @@
+[
+  {
+    "insert": "Item one"
+  },
+  {
+    "attributes": {
+      "list": "ordered"
+    },
+    "insert": "\n"
+  },
+  {
+    "insert": "Item two"
+  },
+  {
+    "attributes": {
+      "list": "ordered"
+    },
+    "insert": "\n"
+  },
+  {
+    "insert": "Item three"
+  },
+  {
+    "attributes": {
+      "list": "bullet"
+    },
+    "insert": "\n"
+  },
+  {
+    "insert": "Item four"
+  },
+  {
+    "attributes": {
+      "list": "bullet"
+    },
+    "insert": "\n"
+  }
+]

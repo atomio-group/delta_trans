@@ -1,0 +1,47 @@
+[
+  {
+    "insert": "This is an "
+  },
+  {
+    "attributes": {
+      "bold": true
+    },
+    "insert": "H1"
+  },
+  {
+    "insert": "\n",
+    "attributes": {
+      "header": 1
+    }
+  },
+  {
+    "insert": "This is an "
+  },
+  {
+    "attributes": {
+      "bold": true
+    },
+    "insert": "H2"
+  },
+  {
+    "insert": "\n",
+    "attributes": {
+      "header": 2
+    }
+  },
+  {
+    "insert": "This is an "
+  },
+  {
+    "attributes": {
+      "bold": true
+    },
+    "insert": "H3"
+  },
+  {
+    "insert": "\n",
+    "attributes": {
+      "header": 3
+    }
+  }
+]
