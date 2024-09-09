@@ -6,6 +6,9 @@
     "insert": "\n"
   },
   {
+    "insert": "\n"
+  },
+  {
     "insert": "item one"
   },
   {
@@ -21,6 +24,9 @@
     "attributes": {
       "list": "bullet"
     },
+    "insert": "\n"
+  },
+  {
     "insert": "\n"
   },
   {

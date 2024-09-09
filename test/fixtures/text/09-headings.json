@@ -15,6 +15,9 @@
     }
   },
   {
+    "insert": "\n"
+  },
+  {
     "insert": "This is an "
   },
   {
@@ -28,6 +31,9 @@
     "attributes": {
       "header": 2
     }
+  },
+  {
+    "insert": "\n"
   },
   {
     "insert": "This is an "

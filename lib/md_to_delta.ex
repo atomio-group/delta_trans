@@ -11,6 +11,7 @@ defmodule MdToDelta do
       [
         %{"insert" => "Hello"},
         %{"attributes" => %{"header" => 1}, "insert" => "\\n"},
+        %{"insert" => "\\n"},
         %{"insert" => "World"},
         %{"insert" => "\\n"}
       ]
@@ -18,32 +19,72 @@ defmodule MdToDelta do
   def parse(binary) do
     {:ok, ast_nodes, _messages} = EarmarkParser.as_ast(binary)
 
+    lookahead_list =
+      ast_nodes
+      |> Enum.drop(1)
+      |> Enum.concat([nil])
+
     ast_nodes
+    |> Enum.zip(lookahead_list)
     |> Enum.map(&visit_block(&1, []))
     |> List.flatten()
     |> Enum.map(&convert_to_delta_ops/1)
   end
 
-  defp visit_block({"hr", [{"class", "thin"}], _children, _meta}, acc) do
+  @blocks ~w(p pre h1 h2 h3 h4 h5 h6 ul ol table)
+
+  defp maybe_add_newline(
+         {curr_tag, _attrs1, _children1, _meta1},
+         {next_tag, _attrs2, _children2, _meta2}
+       )
+       when curr_tag in @blocks and next_tag in @blocks do
+    [{"\n", [], []}]
+  end
+
+  defp maybe_add_newline(_curr, _next) do
+    []
+  end
+
+  defp visit_block(
+         {
+           {"hr", [{"class", "thin"}], _children, _meta},
+           _next
+         },
+         acc
+       ) do
     acc ++ [{%{"divider" => true}, [], []}, {"\n", [], []}]
   end
 
   @blocks_without_newline ~w(ol ul pre table)
 
-  defp visit_block({tag, _attributes, children, _meta} = ast, acc)
+  defp visit_block(
+         {
+           {tag, _attributes, children, _meta} = ast,
+           next
+         },
+         acc
+       )
        when tag not in @blocks_without_newline do
     attributes = ast_to_attribute(ast)
     parents = [tag]
 
     acc ++
       List.flatten(Enum.map(children, &visit_child(&1, parents, attributes, acc))) ++
-      [{"\n", parents, attributes}]
+      [{"\n", parents, attributes}] ++ maybe_add_newline(ast, next)
   end
 
-  defp visit_block({tag, _attributes, children, _meta} = ast, acc) do
+  defp visit_block(
+         {
+           {tag, _attributes, children, _meta} = ast,
+           next
+         },
+         acc
+       ) do
     attributes = ast_to_attribute(ast)
 
-    acc ++ List.flatten(Enum.map(children, &visit_child(&1, [tag], attributes, acc)))
+    acc ++
+      List.flatten(Enum.map(children, &visit_child(&1, [tag], attributes, acc))) ++
+      maybe_add_newline(ast, next)
   end
 
   defp visit_child(child, [_inline_parent, "li" | _] = parents, parent_attributes, acc)

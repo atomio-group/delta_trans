@@ -2,43 +2,36 @@ defmodule MdToDeltaTest do
   use ExUnit.Case
   doctest MdToDelta
 
-  @fixtures_dir "test/fixtures"
-  @expected_dir "test/expected"
+  @dir "test/fixtures/"
 
-  test_types = File.ls!(@fixtures_dir)
+  test_types = File.ls!(@dir)
 
   for type <- test_types do
     describe "#{type} parsing" do
-      test_dir = @fixtures_dir <> "/#{type}"
+      context_dir = Path.join(@dir, "#{type}/")
 
-      test_file_names =
-        test_dir
+      files =
+        context_dir
         |> File.ls!()
-        |> Enum.map(&String.replace(&1, ".md", ""))
+        |> Enum.filter(&(Path.extname(&1) == ".md"))
         |> Enum.sort()
 
-      for file_name <- test_file_names do
-        test file_name do
-          file_name = unquote(file_name)
-          type = unquote(type)
+      for file <- files do
+        test Path.rootname(file) do
+          file_path = Path.join(unquote(context_dir), unquote(file))
 
-          file_path = "/#{type}/" <> file_name
-
-          expected =
-            @expected_dir
-            |> Kernel.<>(file_path)
-            |> Kernel.<>(".json")
-            |> File.read!()
-            |> Jason.decode!()
-
-          actual =
-            @fixtures_dir
-            |> Kernel.<>(file_path)
-            |> Kernel.<>(".md")
+          parsed =
+            file_path
             |> File.read!()
             |> MdToDelta.parse()
 
-          assert actual == expected
+          expected =
+            file_path
+            |> String.replace("md", "json")
+            |> File.read!()
+            |> Jason.decode!()
+
+          assert parsed == expected
         end
       end
     end

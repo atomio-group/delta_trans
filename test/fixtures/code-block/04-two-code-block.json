@@ -1,12 +1,6 @@
 [
   {
-    "insert": "Say we have the following function:"
-  },
-  {
-    "insert": "\n"
-  },
-  {
-    "insert": "function f() { }"
+    "insert": "line 1"
   },
   {
     "attributes": {
@@ -15,13 +9,28 @@
     "insert": "\n"
   },
   {
-    "insert": "If we ever decided to call it something else, we would go:"
+    "insert": "line 2"
+  },
+  {
+    "attributes": {
+      "code-block": true
+    },
+    "insert": "\n"
   },
   {
     "insert": "\n"
   },
   {
-    "insert": "function g() { }"
+    "insert": "line 3"
+  },
+  {
+    "attributes": {
+      "code-block": true
+    },
+    "insert": "\n"
+  },
+  {
+    "insert": "line 4"
   },
   {
     "attributes": {
