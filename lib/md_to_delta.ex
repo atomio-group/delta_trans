@@ -98,7 +98,7 @@ defmodule MdToDelta do
         parent_attributes
       end
 
-    acc ++ [{child, parents, parent_attributes}, {"\n", parents, parent_attributes}]
+    acc ++ [{child, parents, parent_attributes}]
   end
 
   defp visit_child(child, ["li" | _] = parents, parent_attributes, acc)
@@ -112,7 +112,7 @@ defmodule MdToDelta do
         parent_attributes
       end
 
-    acc ++ [{child, parents, parent_attributes}, {"\n", parents, parent_attributes}]
+    acc ++ [{child, parents, parent_attributes}]
   end
 
   defp visit_child(child, ["code" | _] = parents, parent_attributes, acc)
@@ -177,20 +177,6 @@ defmodule MdToDelta do
       [{"\n", parents, Keyword.take(parent_attributes, [:table, :align])}]
   end
 
-  defp visit_child({"li", _attributes, [text], _meta}, parents, parent_attributes, acc)
-       when is_binary(text) do
-    nesting_count = Enum.count(parents, &(&1 in ["ol", "ul"]))
-
-    parent_attributes =
-      if nesting_count > 1 do
-        Keyword.put(parent_attributes, :indent, nesting_count - 1)
-      else
-        parent_attributes
-      end
-
-    acc ++ [{text, parents, parent_attributes}, {"\n", parents, parent_attributes}]
-  end
-
   defp visit_child(
          {"code", _attributes, [code_block_text], _meta} = ast,
          ["pre" | _] = parents,
@@ -223,6 +209,23 @@ defmodule MdToDelta do
     acc ++ [{inline_code_text, parents, parent_attributes}]
   end
 
+  defp visit_child({"li", _attributes, [child], _meta}, parents, parent_attributes, acc) do
+    nesting_count = Enum.count(parents, &(&1 in ["ol", "ul"]))
+
+    parent_attributes =
+      if nesting_count > 1 do
+        Keyword.put(parent_attributes, :indent, nesting_count - 1)
+      else
+        parent_attributes
+      end
+
+    parents = ["li"] ++ parents
+
+    acc ++
+      List.flatten(visit_child(child, ["li"] ++ parents, parent_attributes, acc)) ++
+      [{"\n", parents, parent_attributes}]
+  end
+
   defp visit_child({"li", _attributes, children, _meta}, parents, parent_attributes, acc) do
     nesting_count = Enum.count(parents, &(&1 in ["ol", "ul"]))
 
@@ -233,10 +236,28 @@ defmodule MdToDelta do
         parent_attributes
       end
 
-    acc ++
-      List.flatten(
-        Enum.map(children, &visit_child(&1, ["li"] ++ parents, parent_attributes, acc))
-      )
+    parents = ["li"] ++ parents
+
+    has_nested_blocks =
+      Enum.any?(children, fn
+        {tag, _, _, _} -> tag in @blocks
+        _ -> false
+      end)
+
+    if has_nested_blocks do
+      acc ++
+        List.flatten(
+          children
+          |> Enum.map(&visit_child(&1, parents, parent_attributes, acc))
+          |> Enum.intersperse({"\n", parents, parent_attributes})
+        )
+    else
+      acc ++
+        List.flatten(
+          Enum.map(children, &visit_child(&1, parents, parent_attributes, acc)) ++
+            [{"\n", parents, parent_attributes}]
+        )
+    end
   end
 
   defp visit_child({tag, _atrributes, children, _meta} = ast, parents, parent_attributes, acc) do
