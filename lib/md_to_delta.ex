@@ -31,6 +31,17 @@ defmodule MdToDelta do
     |> Enum.map(&convert_to_delta_ops/1)
   end
 
+  @layout_blocks ~w(ul ol table)
+  @text_blocks ~w(p pre h1 h2 h3 h4 h5 h6)
+
+  defp maybe_add_newline(
+         {curr_tag, _attrs1, _children1, _meta1},
+         {next_tag, _attrs2, _children2, _meta2}
+       )
+       when curr_tag in @layout_blocks and next_tag in @text_blocks do
+    [{"\n", [], []}, {"\n", [], []}]
+  end
+
   @blocks ~w(p pre h1 h2 h3 h4 h5 h6 ul ol table)
 
   defp maybe_add_newline(

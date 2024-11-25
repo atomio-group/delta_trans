@@ -1,0 +1,83 @@
+[
+  {
+    "insert": "This is a paragraph followed by an unordered list"
+  },
+  {
+    "insert": "\n"
+  },
+  {
+    "insert": "\n"
+  },
+  {
+    "insert": "item one"
+  },
+  {
+    "attributes": {
+      "list": "bullet"
+    },
+    "insert": "\n"
+  },
+  {
+    "insert": "item two"
+  },
+  {
+    "attributes": {
+      "list": "bullet"
+    },
+    "insert": "\n"
+  },
+  {
+    "insert": "\n"
+  },
+  {
+    "insert": "\n"
+  },
+  {
+    "insert": "This is a paragraph after an unordered list."
+  },
+  {
+    "insert": "\n"
+  },
+  {
+    "insert": "\n"
+  },
+  {
+    "insert": "This is a paragraph followed by an ordered list"
+  },
+  {
+    "insert": "\n"
+  },
+  {
+    "insert": "\n"
+  },
+  {
+    "insert": "item one"
+  },
+  {
+    "attributes": {
+      "list": "ordered"
+    },
+    "insert": "\n"
+  },
+  {
+    "insert": "item two"
+  },
+  {
+    "attributes": {
+      "list": "ordered"
+    },
+    "insert": "\n"
+  },
+  {
+    "insert": "\n"
+  },
+  {
+    "insert": "\n"
+  },
+  {
+    "insert": "This is a paragraph after an ordered list."
+  },
+  {
+    "insert": "\n"
+  }
+]
