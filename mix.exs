@@ -3,7 +3,7 @@ defmodule MdToDelta.MixProject do
 
   def project do
     [
-      app: :md_to_delta,
+      app: :delta_trans,
       version: "0.1.3",
       elixir: "~> 1.16",
       start_permanent: Mix.env() == :prod,

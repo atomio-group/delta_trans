@@ -1,6 +1,7 @@
-defmodule MdToDeltaTest do
+defmodule DeltaTrans.MarkdownTransformerTest do
   use ExUnit.Case
-  doctest MdToDelta
+
+  doctest DeltaTrans.MarkdownTransformer
 
   @dir "test/fixtures/"
 
